@@ -3,7 +3,7 @@ package server.controller
 import akka.http.scaladsl.server.Directives.{complete, get, path}
 import akka.http.scaladsl.server.Route
 
-object RouteHandler {
+class RouteHandler {
 
   def route: Route = path("hello") {
     get {
