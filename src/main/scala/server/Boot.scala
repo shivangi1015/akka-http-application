@@ -17,7 +17,7 @@ object Boot extends App {
 
   lazy val router = wire[RouteHandler]
   val binding = Http()
-    .bindAndHandle(router.route, ConfigReader.host, ConfigReader.port)
+    .bindAndHandle(router.route, ConfigReader.HOST, ConfigReader.PORT)
   binding.onComplete {
     case Success(_) => println("success")
     case Failure(error) => println(s"Error: ${error.getMessage}")
