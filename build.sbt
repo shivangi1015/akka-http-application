@@ -10,5 +10,8 @@ libraryDependencies ++= Seq("com.typesafe.akka" %% "akka-actor" % "2.5.13",
   "org.scalatest" %% "scalatest" % "3.0.8-RC5" % Test,
   "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided",
   "com.typesafe.slick" %% "slick" % "3.3.0",
-  "com.typesafe.akka" %% "akka-http-testkit" % "10.1.3" % Test
+  "com.typesafe.akka" %% "akka-http-testkit" % "10.1.3" % Test,
+  "com.typesafe.slick" %% "slick" % "3.3.0",
+  "com.h2database" % "h2" % "1.4.197",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
