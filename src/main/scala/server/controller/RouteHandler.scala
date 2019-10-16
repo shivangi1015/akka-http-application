@@ -1,6 +1,6 @@
 package server.controller
 
-import akka.http.scaladsl.server.Directives.{complete, get, path}
+import akka.http.scaladsl.server.Directives.{complete, get, path, post}
 import akka.http.scaladsl.server.Route
 
 class RouteHandler {
