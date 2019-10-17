@@ -1,8 +1,13 @@
 package server.repository
 
-import db.DbComponent
+import db.{DbComponent, PostgresDbComponent}
 
 import scala.concurrent.Future
+
+trait UserRepository extends WriteRepository with ReadRepository
+
+object UserRepository extends UserRepository with WriteRepositoryImpl with ReadRepositoryImpl with
+  DbComponent with PostgresDbComponent
 
 trait WriteRepository {
 
@@ -66,7 +71,7 @@ trait UserTable {
 
   import driver.api._
 
-  class UserTableMapping(tag: Tag) extends Table[User](tag, "user") {
+  class UserTableMapping(tag: Tag) extends Table[User](tag, "users") {
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
