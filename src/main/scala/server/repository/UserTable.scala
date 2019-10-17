@@ -60,7 +60,7 @@ trait ReadRepositoryImpl extends ReadRepository with UserTable {
   }
 }
 
-trait UserTable extends App {
+trait UserTable {
 
   this: DbComponent =>
 
