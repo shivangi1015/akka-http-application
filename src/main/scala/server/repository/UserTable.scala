@@ -1,7 +1,6 @@
 package server.repository
 
-// Import the Slick interface for H2:
-import slick.jdbc.H2Profile.api._
+import db.DbComponent
 
 import scala.concurrent.Future
 
@@ -16,22 +15,26 @@ trait WriteRepository {
   def deleteUserById(id: Int): Future[Int]
 }
 
-trait WriteRepositoryImpl extends WriteRepository with UserTable {
+trait WriteRepositoryImpl extends WriteRepository {
+
+  this: DbComponent with UserTable =>
+
+  import driver.api._
 
   override def store(user: User): Future[Int] = {
-    db.run(messages += user)
+    db.run(userTableQuery += user)
   }
 
   override def bulkInsert(users: List[User]): Future[Option[Int]] = {
-    db.run(messages ++= users)
+    db.run(userTableQuery ++= users)
   }
 
   override def updateName(id: Int, name: String): Future[Int] = {
-    db.run(messages.filter(_.id === id).map(user => user.fname).update(name))
+    db.run(userTableQuery.filter(_.id === id).map(user => user.fname).update(name))
   }
 
   override def deleteUserById(id: Int): Future[Int] = {
-    db.run(messages.filter(_.id === id).delete)
+    db.run(userTableQuery.filter(_.id === id).delete)
   }
 }
 
@@ -44,19 +47,24 @@ trait ReadRepository {
 
 trait ReadRepositoryImpl extends ReadRepository with UserTable {
 
+  this: DbComponent with UserTable =>
+
+  import driver.api._
+
   override def listAllUsers(): Future[Seq[User]] = {
-    db.run(messages.result)
+    db.run(userTableQuery.result)
   }
 
   override def userById(id: Int): Future[Seq[User]] = {
-    db.run(messages.filter(_.id === id).result)
+    db.run(userTableQuery.filter(_.id === id).result)
   }
 }
 
 trait UserTable extends App {
 
-  // Create an in-memory H2 database;
-  val db = Database.forConfig("chapter01")
+  this: DbComponent =>
+
+  import driver.api._
 
   class UserTableMapping(tag: Tag) extends Table[User](tag, "user") {
 
@@ -77,7 +85,7 @@ trait UserTable extends App {
     def * = (id, fname, lname, age, gender, state, country).mapTo[User]
   }
 
-  lazy val messages = TableQuery[UserTableMapping]
+  lazy val userTableQuery = TableQuery[UserTableMapping]
 }
 
 

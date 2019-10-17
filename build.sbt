@@ -13,5 +13,7 @@ libraryDependencies ++= Seq("com.typesafe.akka" %% "akka-actor" % "2.5.13",
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.3" % Test,
   "com.typesafe.slick" %% "slick" % "3.3.0",
   "com.h2database" % "h2" % "1.4.197",
-  "ch.qos.logback" % "logback-classic" % "1.2.3"
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0",
+  "org.postgresql" % "postgresql" % "9.4.1212"
 )
