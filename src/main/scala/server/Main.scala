@@ -6,7 +6,13 @@ object Main extends App {
 
   val userRepository = UserRepository
 
-  userRepository.store(User(1, "shivangi", "gupta", 26, "f", "gzb", "up"))
+  /*userRepository.store(User(1, "shivangi", "gupta", 26, "f", "gzb", "up"))
 
-  userRepository.listAllUsers() foreach println
+  Thread.sleep(5000)*/
+  println("reading...")
+  userRepository.listAllUsers().foreach{x =>
+    println("in foreach")
+    println(x)
+  }
+  Thread.sleep(5000)
 }

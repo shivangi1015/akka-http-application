@@ -57,6 +57,7 @@ trait ReadRepositoryImpl extends ReadRepository with UserTable {
   import driver.api._
 
   override def listAllUsers(): Future[Seq[User]] = {
+    println("in method...")
     db.run(userTableQuery.result)
   }
 
