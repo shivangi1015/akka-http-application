@@ -6,13 +6,19 @@ object Main extends App {
 
   val userRepository = UserRepository
 
-  /*userRepository.store(User(1, "shivangi", "gupta", 26, "f", "gzb", "up"))
+  val users = List(
+    User(2, "Ashok", "Gupta", 62, "m", "UP", "India"),
+    User(3, "Santosh", "Gupta", 61, "f", "UP", "India")
+  )
+  val response =
+  for {
+    rows <- userRepository.listAllUsers()
+  } yield rows
 
-  Thread.sleep(5000)*/
-  println("reading...")
-  userRepository.listAllUsers().foreach{x =>
-    println("in foreach")
-    println(x)
+  Thread.sleep(5000)
+  response.foreach { res =>
+    println(s"Rows $res")
+    println(s"Rows ${res.size}")
   }
   Thread.sleep(5000)
 }

@@ -74,7 +74,7 @@ trait UserTable {
 
   class UserTableMapping(tag: Tag) extends Table[User](tag, "users") {
 
-    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Int]("id", O.PrimaryKey)
 
     def fname = column[String]("fname")
 
