@@ -1,13 +1,43 @@
 package server.controller
 
-import akka.http.scaladsl.server.Directives.{complete, get, path, post}
+import akka.actor.ActorSystem
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import server.repository.{User, UserRepository}
 
-class RouteHandler {
+import scala.concurrent.ExecutionContextExecutor
 
-  def route: Route = path("hello") {
-    get {
-      complete("Hello, World!")
-    }
-  }
+class RouteHandler extends JsonSupport {
+
+  implicit val system: ActorSystem = ActorSystem("users")
+  implicit val dispatcher: ExecutionContextExecutor = system.dispatcher
+  val route: Route =
+    path("insert") {
+      post {
+        entity(as[User]) { user =>
+          complete {
+            val inserted = UserRepository.store(user)
+            inserted.map {
+              result => HttpResponse(entity = result + " row inserted")
+            }
+          }
+        }
+      }
+    } ~
+      path("delete") {
+        delete {
+          entity(as[Int]) {
+            id =>
+              complete {
+                UserRepository.deleteUserById(id).map {
+                  result => HttpResponse(entity = result + " user deleted")
+                }
+              }
+          }
+        }
+      }
 }
+
+
+

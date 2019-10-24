@@ -11,11 +11,11 @@ import scala.util.{Failure, Success}
 
 object Boot extends App {
 
-  implicit val system: ActorSystem = ActorSystem("helloworld")
-  implicit val executor: ExecutionContext = system.dispatcher
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
-
   lazy val router = wire[RouteHandler]
+  implicit val system: ActorSystem = router.system
+  implicit val executor: ExecutionContext = router.dispatcher
+
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
   val binding = Http()
     .bindAndHandle(router.route, ConfigReader.HOST, ConfigReader.PORT)
   binding.onComplete {
