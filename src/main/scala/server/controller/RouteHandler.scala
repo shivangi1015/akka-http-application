@@ -8,8 +8,9 @@ import server.repository.{User, UserRepository}
 
 import scala.concurrent.ExecutionContextExecutor
 
-class RouteHandler extends JsonSupport {
+class RouteHandler {
 
+  import server.controller.JsonSupport._
   implicit val system: ActorSystem = ActorSystem("users")
   implicit val dispatcher: ExecutionContextExecutor = system.dispatcher
   val route: Route =
@@ -26,7 +27,7 @@ class RouteHandler extends JsonSupport {
       }
     } ~
       path("delete") {
-        delete {
+        post {
           entity(as[Int]) {
             id =>
               complete {
