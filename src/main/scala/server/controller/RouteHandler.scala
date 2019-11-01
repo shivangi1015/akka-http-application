@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.server.Route
-import server.repository.{User, UserRepository}
+import server.repository.{User, UserRepository, BulkUser}
 
 import scala.concurrent.ExecutionContextExecutor
 
@@ -27,11 +27,11 @@ class RouteHandler extends JsonSupport {
     } ~
       path("users") {
         post {
-          entity(as[List[User]]) { users =>
+          entity(as[BulkUser]) { bulkUser =>
             complete {
-              val inserted = UserRepository.bulkInsert(users)
+              val inserted = UserRepository.bulkInsert(bulkUser.users)
               inserted.map {
-                result => HttpResponse(entity = result + " rows inserted")
+                result => HttpResponse(entity = result.getOrElse(0) + " rows inserted")
               }
             }
           }
