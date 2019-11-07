@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.server.Route
-import server.repository.{User, UserRepository, BulkUser}
+import server.repository.{BulkUser, User, UserRepository}
 
 import scala.concurrent.ExecutionContextExecutor
 
@@ -40,7 +40,9 @@ class RouteHandler extends JsonSupport {
       pathPrefix("user" / IntNumber) { id =>
         get {
           complete {
-            UserRepository.userById(id)
+            UserRepository.userById(id).map {
+              result => HttpResponse(entity = "Users: " + result)
+            }
           }
         }
       } ~
@@ -50,34 +52,29 @@ class RouteHandler extends JsonSupport {
             UserRepository.listAllUsers()
           }
         }
+      } ~
+      pathPrefix("delete" / IntNumber) { id =>
+        delete {
+          complete {
+            UserRepository.deleteUserById(id).map {
+              result => HttpResponse(entity = result + " deleted.")
+            }
+          }
+        }
+      } ~
+      pathPrefix("update" / IntNumber) { id => {
+        path(Segment) { name =>
+          put {
+            complete {
+              UserRepository.updateName(id, name).map {
+                result => HttpResponse(entity = result + " updated")
+              }
+            }
+          }
+        }
       }
-  /* }
- }
-   path("insert") {
-     post {
-       entity(as[Int]) { user =>
-         complete {
-           /*val inserted = UserRepository.store(user)
-           inserted.map {
-             result => HttpResponse(entity = result + " row inserted")
-           }*/
-           HttpResponse(entity = " row inserted")
-         }
-       }
-     }
-   }/* ~
-     path("delete") {
-       get {
-         entity(as[Int]) {
-           id =>
-             complete {
-               UserRepository.deleteUserById(id).map {
-                 result => HttpResponse(entity = result + " user deleted")
-               }
-             }
-         }
-       }
-     }*/*/
+
+      }
 }
 
 

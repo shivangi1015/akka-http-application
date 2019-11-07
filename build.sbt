@@ -16,5 +16,6 @@ libraryDependencies ++= Seq("com.typesafe.akka" %% "akka-actor" % "2.5.19",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0",
   "org.postgresql" % "postgresql" % "9.4.1212",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.7"
+  "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.7",
+  "org.mockito" % "mockito-all" % "1.9.5" % Test
 )
