@@ -5,10 +5,11 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.server.Route
 import server.repository.{BulkUser, User, UserRepository}
+import server.controller.JsonSupport._
 
 import scala.concurrent.ExecutionContextExecutor
 
-class RouteHandler extends JsonSupport {
+class RouteHandler {
 
   implicit val system: ActorSystem = ActorSystem("users")
   implicit val dispatcher: ExecutionContextExecutor = system.dispatcher

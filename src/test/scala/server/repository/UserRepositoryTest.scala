@@ -16,7 +16,7 @@ class UserRepositoryTest extends WordSpec with Matchers with ScalaFutures
       userRepo.store(user) map {
         rowsInserted =>
           println(s"::: $rowsInserted")
-          assert(rowsInserted == 5)
+          rowsInserted should ===(5)
       }
     }
 
