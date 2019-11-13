@@ -4,12 +4,12 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.server.Route
-import server.repository.{BulkUser, User, UserRepository}
 import server.controller.JsonSupport._
+import server.repository.{BulkUser, User, UserRepository}
 
 import scala.concurrent.ExecutionContextExecutor
 
-class RouteHandler {
+class RouteHandler(userRepository: UserRepository) {
 
   implicit val system: ActorSystem = ActorSystem("users")
   implicit val dispatcher: ExecutionContextExecutor = system.dispatcher
@@ -18,7 +18,7 @@ class RouteHandler {
       post {
         entity(as[User]) { user =>
           complete {
-            val inserted = UserRepository.store(user)
+            val inserted = userRepository.store(user)
             inserted.map {
               result => HttpResponse(entity = result + " row inserted")
             }
@@ -30,7 +30,7 @@ class RouteHandler {
         post {
           entity(as[BulkUser]) { bulkUser =>
             complete {
-              val inserted = UserRepository.bulkInsert(bulkUser.users)
+              val inserted = userRepository.bulkInsert(bulkUser.users)
               inserted.map {
                 result => HttpResponse(entity = result.getOrElse(0) + " rows inserted")
               }
@@ -41,7 +41,7 @@ class RouteHandler {
       pathPrefix("user" / IntNumber) { id =>
         get {
           complete {
-            UserRepository.userById(id).map {
+            userRepository.userById(id).map {
               result => HttpResponse(entity = "Users: " + result)
             }
           }
@@ -50,15 +50,17 @@ class RouteHandler {
       pathPrefix("user-all") {
         get {
           complete {
-            UserRepository.listAllUsers()
+            userRepository.listAllUsers().map {
+              result => HttpResponse(entity = "Users: " + result)
+            }
           }
         }
       } ~
       pathPrefix("delete" / IntNumber) { id =>
         delete {
           complete {
-            UserRepository.deleteUserById(id).map {
-              result => HttpResponse(entity = result + " deleted.")
+            userRepository.deleteUserById(id).map {
+              result => HttpResponse(entity = result + " row deleted.")
             }
           }
         }
@@ -67,8 +69,8 @@ class RouteHandler {
         path(Segment) { name =>
           put {
             complete {
-              UserRepository.updateName(id, name).map {
-                result => HttpResponse(entity = result + " updated")
+              userRepository.updateName(id, name).map {
+                result => HttpResponse(entity = result + " row updated.")
               }
             }
           }

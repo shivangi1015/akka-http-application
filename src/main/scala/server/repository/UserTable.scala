@@ -27,7 +27,6 @@ trait WriteRepositoryImpl extends WriteRepository {
   import driver.api._
 
   override def store(user: User): Future[Int] = {
-    println("\n\n====not mocked")
     db.run(userTableQuery += user)
   }
 

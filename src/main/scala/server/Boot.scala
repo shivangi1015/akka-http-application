@@ -4,14 +4,14 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import server.controller.RouteHandler
-import com.softwaremill.macwire._
+import server.repository.UserRepository
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 object Boot extends App {
 
-  lazy val router = wire[RouteHandler]
+  lazy val router: RouteHandler = new RouteHandler(UserRepository)
   implicit val system: ActorSystem = router.system
   implicit val executor: ExecutionContext = router.dispatcher
 
